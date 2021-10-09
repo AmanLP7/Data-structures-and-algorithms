@@ -92,7 +92,7 @@ class MergeSort:
                 temp.append(left[i])
                 i += 1
 
-            elif left[i] < right[j]:
+            elif left[i] <= right[j]:
                 temp.append(left[i])
                 i += 1
         
