@@ -23,6 +23,7 @@ class MergeSort:
 
         Parameters
         ----------
+        None
         '''
 
         pass
