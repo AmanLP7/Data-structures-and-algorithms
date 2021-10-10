@@ -121,12 +121,19 @@ class CountInversions:
 
 if __name__ == '__main__':
 
-    arr = list(map(int, input("Input numbers with space: ").split(" ")))
+    # Reading array from the file
+    arr = []
+    with open("test.txt", "r") as file:
+        for line in file:
+            arr.append(line.strip())
+
+    arr = [int(x) for x in arr]
 
     count_inversions = CountInversions()
 
     result = count_inversions.merge_and_count_inversions(arr)
 
-    print(result)
+    print(result[1])
+
 
     
