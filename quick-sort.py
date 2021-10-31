@@ -37,26 +37,6 @@ class QuickSort:
         pass
     
     
-    def find_midpoint(self, arr_length: int) -> int:
-        '''
-        Function to find middle index of an array
-        ...
-
-        Parameters
-        ----------
-        arr_length (int):
-            length of the array
-
-        Returns
-        -------
-        Middle index of the array
-        '''
-
-        midpoint = arr_length // 2
-
-        return midpoint
-
-
     def partition(self, arr: list, l: int, r: int) -> list:
         '''
         Function to partition the array around a chosen
@@ -76,37 +56,42 @@ class QuickSort:
 
         Returns
         -------
-        A partitioned list based on quick sort algorithm
+        A tuple containing:
+        1. Partitioned array
+        2. Left most index of array
+        3. Position of pivot element
+        4. Right most index of array
         '''
 
         # Choose a random index from the array
         # and swap the first element of the array
         # with the element at the chosen index
-        index = randint(l, r)
+        index = randint(l, r-1)
         arr[l], arr[index] = arr[index], arr[l]
 
         # Choose the first element of the array as pivot
         pivot = arr[l]
-
+ 
         # Initialise the indices
         i = l+1
 
         # Iterate through the elements of the array
         # swap the jth element with ith element if 
-        # jth element is greater than the ith element
-        for j in range(l+1, len(arr)-1):
-            if arr[j] > p:
+        # jth element is smaller than or equal
+        # to the pivot element
+        for j in range(l+1, r):
+            if arr[j] <= pivot:
                 arr[i], arr[j] = arr[j], arr[i]
                 i += 1
         
-        # Swap first element array with element 
-        # at (i-1)th element
+        # Swap first element of array 
+        # with element at (i-1)th index
         arr[l], arr[i-1] = arr[i-1], arr[l]
 
-        return arr
+        return (arr, l, i-1, r)
 
 
-    def qsort(self, arr: list) -> list:
+    def qsort(self, arr: list, l: int, r: int) -> list:
         '''
         Function to sort array using quick sort
         ...
@@ -115,28 +100,44 @@ class QuickSort:
         ----------
         arr (list):
             array to be sorted
+        l (int):
+            left most index of the array
+        r (int):
+            right most index of the array
 
         Returns
         -------
         Sorted array
         '''
 
-        # Base case, if length is 1 return the array
-        if len(arr) <= 1:
+        # Base case, if left index is greater
+        # than or equal to righ index then
+        # return array
+        if l >= r:
             return arr
 
-        # Find the middle index of the array
-        m = self.find_midpoint(len(arr))
+        # Partitioning the array 
+        a, l, p, r = self.partition(arr, l, r)
+        
+        # Partitioning left portion of pivot
+        self.qsort(arr, l, p)
 
-        # Break array into left and right halves
-        l = 0
-        r = len(arr)-1
-
-        # Sorting the left and right half recursively
-        self.partition(arr, l, m)
-        self.partition(arr, m, r)
+        # Partitioning right portion of pivot
+        self.qsort(arr, p+1, r)
 
         return arr
+
+
+
+#######################################################################################################################
+
+if __name__ == '__main__':
+
+    arr = list(map(int, input("Input the numbers: ").split(",")))
+
+    qs = QuickSort()
+
+    print(qs.qsort(arr, 0, len(arr)))
 
 
 
