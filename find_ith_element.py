@@ -11,8 +11,6 @@ Python script to find ith smallest element in an array. Time complexity is O(n).
 # System library imports
 from random import randint          # To chose a random element in a given range
 
-# 3rd party libraries
-
 
 ########################################################################################################################
 
@@ -39,7 +37,7 @@ class FindElement:
         pass
 
 
-    def partition(self, arr: list, l: int, r: int) -> list:
+    def partition(self, arr: list, l: int, p: int, r: int) -> list:
         '''
         Function to partition the array around a chosen
         pivot element, the pivot element is chose randomly
@@ -53,6 +51,8 @@ class FindElement:
             list of elements to be partitioned
         l (int):
             left most index
+        p (int):
+            index of the pivot element
         r (int):
             right most index
 
@@ -65,11 +65,9 @@ class FindElement:
         4. Right most index of array
         '''
 
-        # Choose a random index from the array
-        # and swap the first element of the array
-        # with the element at the chosen index
-        index = randint(l, r-1)
-        arr[l], arr[index] = arr[index], arr[l]
+        # Swap the first element of the array
+        # with the element at the given index p
+        arr[l], arr[p] = arr[p], arr[l]
 
         # Choose the first element of the array as pivot
         pivot = arr[l]
@@ -93,6 +91,55 @@ class FindElement:
         return (arr, l, i-1, r)
 
 
-    def random_select(self, arr: list, l: int, r: int, element: int) -> 
+    def random_select(self, arr: list, l: int, r: int, element: int) -> int:
+        '''
+        Function to recursively select ith element
+        ...
+
+        Parameters
+        ----------
+        arr (list):
+            list to select elements from
+        l (int):
+            left most index of array
+        r (int):
+            right most index of array
+        element (int):
+            position of element
+
+        Returns
+        -------
+        ith element from the array
+        ''' 
+
+        # Base case, when array contains only one element
+        if l >= r-1:
+            return arr[l]
+
+        # Choose an index from array at random
+        p = randint(l, r-1)
+
+        # Partition the array around element at p
+        # and get element at new partition index
+        arr, l, statistic, r = self.partition(arr, l, p, r)
+
+        # If returned statistic equals the required statistic 
+        # return the element at the index, if returned statistic
+        # is greater recursively search for the statistic in the 
+        # first half of the array less than statistic, else
+        # recursively search for the statistic in the second half 
+        # of the array greater than statistic
+        if statistic == i-1:
+            return arr[statistic]
+        elif statistic > i-1:
+            return self.random_select(arr, l, statistic, element)
+        elif statistic < i-1:
+            return self.random_select(arr, statistic + 1, r, element)
+
+
+
+
+
+
 
     

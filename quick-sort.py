@@ -111,7 +111,7 @@ class QuickSort:
         '''
 
         # Base case, if left index is greater
-        # than or equal to righ index then
+        # than or equal to right index then
         # return array
         if l >= r:
             return arr
