@@ -37,7 +37,7 @@ class FindElement:
         pass
 
 
-    def partition(self, arr: list, l: int, p: int, r: int) -> list:
+    def partition(self, arr: list, p: int) -> list:
         '''
         Function to partition the array around a chosen
         pivot element, the pivot element is chose randomly
@@ -49,49 +49,42 @@ class FindElement:
         ----------
         arr (list):
             list of elements to be partitioned
-        l (int):
-            left most index
         p (int):
-            index of the pivot element
-        r (int):
-            right most index
 
         Returns
         -------
         A tuple containing:
         1. Partitioned array
-        2. Left most index of array
-        3. Position of pivot element
-        4. Right most index of array
+        2. Position of pivot element
         '''
 
         # Swap the first element of the array
         # with the element at the given index p
-        arr[l], arr[p] = arr[p], arr[l]
+        arr[0], arr[p] = arr[p], arr[0]
 
         # Choose the first element of the array as pivot
-        pivot = arr[l]
+        pivot = arr[0]
  
         # Initialise the indices
-        i = l+1
+        i = 1
 
         # Iterate through the elements of the array
         # swap the jth element with ith element if 
         # jth element is smaller than or equal
         # to the pivot element
-        for j in range(l+1, r):
+        for j in range(1, len(arr)):
             if arr[j] <= pivot:
                 arr[i], arr[j] = arr[j], arr[i]
                 i += 1
         
         # Swap first element of array 
         # with element at (i-1)th index
-        arr[l], arr[i-1] = arr[i-1], arr[l]
+        arr[0], arr[i-1] = arr[i-1], arr[0]
 
-        return (arr, l, i-1, r)
+        return (arr, i-1)
 
 
-    def random_select(self, arr: list, l: int, r: int, element: int) -> int:
+    def random_select(self, arr: list, element: int) -> int:
         '''
         Function to recursively select ith element
         ...
@@ -100,10 +93,6 @@ class FindElement:
         ----------
         arr (list):
             list to select elements from
-        l (int):
-            left most index of array
-        r (int):
-            right most index of array
         element (int):
             position of element
 
@@ -112,16 +101,19 @@ class FindElement:
         ith element from the array
         ''' 
 
+        # Length of the array
+        arr_len = len(arr)
+
         # Base case, when array contains only one element
-        if l >= r-1:
-            return arr[l]
+        if arr_len <= 1:
+            return arr[0]
 
         # Choose an index from array at random
-        p = randint(l, r-1)
+        p = randint(0, arr_len-1)
 
         # Partition the array around element at p
         # and get element at new partition index
-        arr, l, statistic, r = self.partition(arr, l, p, r)
+        arr, statistic, r = self.partition(arr, p)
 
         # If returned statistic equals the required statistic 
         # return the element at the index, if returned statistic
@@ -132,9 +124,9 @@ class FindElement:
         if statistic == i-1:
             return arr[statistic]
         elif statistic > i-1:
-            return self.random_select(arr, l, statistic, element)
+            return self.random_select(arr[:statistic], element)
         elif statistic < i-1:
-            return self.random_select(arr, statistic + 1, r, element)
+            return self.random_select(arr, statistic + 1, r, element-1-statistic)
 
 
 
