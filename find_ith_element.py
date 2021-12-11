@@ -113,7 +113,7 @@ class FindElement:
 
         # Partition the array around element at p
         # and get element at new partition index
-        arr, statistic, r = self.partition(arr, p)
+        arr, statistic = self.partition(arr, p)
 
         # If returned statistic equals the required statistic 
         # return the element at the index, if returned statistic
@@ -121,17 +121,26 @@ class FindElement:
         # first half of the array less than statistic, else
         # recursively search for the statistic in the second half 
         # of the array greater than statistic
-        if statistic == i-1:
+        if statistic == element-1:
             return arr[statistic]
-        elif statistic > i-1:
+        elif statistic > element-1:
             return self.random_select(arr[:statistic], element)
-        elif statistic < i-1:
-            return self.random_select(arr, statistic + 1, r, element-1-statistic)
-
-
-
-
-
-
+        elif statistic < element-1:
+            return self.random_select(arr[statistic + 1:], element-1-statistic)
 
     
+
+########################################################################################################################
+
+
+if __name__ == '__main__':
+
+    arr = list(map(int, input("Please enter the list seperated by space: ").split(" ")))
+
+    fe = FindElement()
+
+    order = int(input("\nPlease enter the order of the statistic you want to find: "))
+
+    result = fe.random_select(arr, order)
+
+    print(f"\nThe order {order} statistic is = {result}\n")
