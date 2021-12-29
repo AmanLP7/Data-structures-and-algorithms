@@ -10,9 +10,6 @@ This is a python script to find minmum number of cuts in graph using Karger's ra
 
 # System library imports 
 import random                   # Contain functions to make random selections
-import math                     # Mathematical functions
-import copy                     # Module contains function to create copies of an object
-
 
 ########################################################################################################################
 
@@ -38,7 +35,7 @@ class KargersMinCut:
         self.graph = {}
 
 
-    def create_graph(self, file: str) -> dict:
+    def create_graph(self, file: str, delimeter: str = " ") -> dict:
         ''' 
         Function to create a graph given and adjacency list
         ...
@@ -47,6 +44,8 @@ class KargersMinCut:
         ----------
         file (str):
             address of the text file containing adjacency list
+        delimeter (str):
+            delimeter used to seperate values
 
         Returns
         -------
@@ -55,9 +54,8 @@ class KargersMinCut:
 
         with open(file, "r") as adj:
             for line in adj:
-                l = list(map(int, line.strip().split(" ")))
+                l = list(map(int, line.strip().split(delimeter)))
                 self.graph[l[0]] = l[1:]
-
         return self.graph
 
 
@@ -109,16 +107,12 @@ class KargersMinCut:
             # connected to v2, delete connection to v2
             # and add connection to v1
             graph[v1].extend(graph[v2])
-            for node in graph[v2]:
-                graph[node].remove(v2)
-                graph[node].append(v1)
-
-            # Delete node v2
-            del graph[v2]
+            del graph[v2] 
+            for node, _ in graph.items():
+                graph[node] = [v1 if x == v2 else x for x in graph[node]]
 
             # Remove self loops for node v1
-            while v1 in graph[v1]:
-                graph[v1].remove(v1)
+            graph[v1] = [x for x in graph[v1] if x != v1]
 
         minimum_cuts = len(graph[list(graph.keys())[0]])
 
@@ -137,8 +131,9 @@ if __name__ == '__main__':
     cuts = []
 
     for _ in range(300):
-        graph = kargers.create_graph("test.txt")
+        graph = kargers.create_graph("test.txt", delimeter=" ")
         min_cuts = kargers.random_contraction(graph)
         cuts.append(min_cuts)
+        print(f"Iteration {_} : cuts: {min_cuts}...\n")
     
     print(f"Minimum number of cuts: {min(cuts)}\n")
