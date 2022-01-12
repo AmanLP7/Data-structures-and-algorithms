@@ -139,7 +139,7 @@ class LinkedList:
         prev_node.next = new_node
 
 
-    def append(self, value: Union[int, float]) -> Union[None, str]:
+    def append(self, data: Union[int, float]) -> Union[None, str]:
         '''
         Function to add a new node to the end of a linked list.
         The time complexity of this operation is O(n), where n
@@ -149,8 +149,32 @@ class LinkedList:
         Parameters
         ----------
         value (int, float):
+            data to be added
 
+        Returns
+        -------
+        None
         '''
+
+        # Create a new node
+        new_node = Node(data)
+
+        # Check if the linked list is empty
+        # or not, if empty then make the node
+        # the new head of the linked list
+        if self.head is None:
+            self.head = new_node
+            return None
+
+        # Else travel to the last node
+        # and point the last node to the 
+        # new node
+        last = self.head
+        while (last.next):
+            last = last.next
+        last.next = new_node
+
+        return None        
 
 
 ########################################################################################################################
@@ -180,6 +204,12 @@ if __name__ == '__main__':
     # existing node
     llist.insert_after_node(second, 7)
     print("Node added in between the linked list...\n")
+    llist.print_linked_list()
+
+    # Adding new node at the last of
+    # linked list
+    llist.append(10)
+    print("Node added at the end of linked list...\n")
     llist.print_linked_list()
 
 
