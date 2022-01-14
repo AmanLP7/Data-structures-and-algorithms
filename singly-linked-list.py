@@ -74,9 +74,12 @@ class LinkedList:
         '''
 
         element = self.head
-        while (element):
+        while (element.next):
             print(element.data)
             element = element.next
+
+        # Print the last element 
+        print(element.data)
 
 
     def push(self, value: Union[int, float]) -> None:
@@ -126,7 +129,7 @@ class LinkedList:
 
         # Checking of the previous node exists
         if prev_node is None:
-            return "Node must exist in the linke list..."
+            return "Node must exist in the linked list..."
 
         # Create a new node object
         new_node = Node(value)
@@ -177,7 +180,7 @@ class LinkedList:
         return None 
 
 
-    def delete(self, key: Union[int, float]) -> None:
+    def delete_node(self, key: Union[int, float]) -> None:
         '''
         Function to delete a node from the linked list
         ...
@@ -226,7 +229,55 @@ class LinkedList:
             temp_node = None
 
         return None
-             
+
+
+    def delete_position(self, position: int) -> None:
+        '''
+        Function to delete a node from a linked 
+        list given a position and return the
+        corresponding element
+        ...
+
+        Parameters
+        ----------
+        position (int):
+            index of the node to be deleted
+
+        Returns
+        -------
+        Key at the position to be deleted     
+        '''
+
+        # Check if the list is empty
+        if self.head is None:
+            return None
+
+        # If the position is the head 
+        # then make node next to the 
+        # head as the new head and delete
+        # the head node
+        if position == 0:
+            temp_node = self.head
+            self.head = self.head.next
+            return temp_node.data
+
+        index = 0
+        current = self.head
+        prev = self.head
+        temp_node = self.head
+
+        while (current):
+            if index == position:
+                temp_node = current.next
+                break
+            prev = current
+            current = current.next
+            index += 1
+
+        prev.next = temp_node
+
+        return current.data
+
 
 
 ########################################################################################################################
@@ -260,14 +311,8 @@ if __name__ == '__main__':
     print("Linked list elements...\n")
     llist.print_linked_list()
 
-    # Deleting the 4 from the linked list
-    llist.delete(10)
-    llist.delete(3)
-    llist.delete(1)
-    llist.delete(2)
-    llist.delete(7)
-    llist.delete(3)
-    llist.delete(0)
-    print("\nLinked list after deletion of element...\n")
+    # Deleting the element based on given position
+    deleted_element = llist.delete_position(5)
+    print(f"Element deleted from the position {5}: {deleted_element}")
+    print("Linked list after deletion...\n")
     llist.print_linked_list()
-
