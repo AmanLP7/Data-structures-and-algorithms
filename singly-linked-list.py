@@ -174,7 +174,59 @@ class LinkedList:
             last = last.next
         last.next = new_node
 
-        return None        
+        return None 
+
+
+    def delete(self, key: Union[int, float]) -> None:
+        '''
+        Function to delete a node from the linked list
+        ...
+
+        Parameters
+        ----------
+        key (int, float):
+            key to be deleted
+
+        Returns
+        -------
+        None
+        ''' 
+
+        # Save head node in a variable
+        temp_node = self.head
+
+        # Check if linked list is empty
+        if temp_node is None:
+            return None
+
+        # If head node is the key that is
+        # supposed to be deleted
+        if temp_node.data == key:
+            self.head = temp_node.next
+            temp_node = None
+            return
+
+        # Traversing the linked list to
+        # find the key to be deleted
+        while (temp_node.next):
+            if temp_node.data == key:
+                break
+            prev_node = temp_node
+            temp_node = temp_node.next
+
+        # If key is not present
+        if temp_node is None:
+            return None
+
+        # Linking node previous to the
+        # key to the node next to key
+        # and delete the node
+        if temp_node.data == key:
+            prev_node.next = temp_node.next
+            temp_node = None
+
+        return None
+             
 
 
 ########################################################################################################################
@@ -197,19 +249,25 @@ if __name__ == '__main__':
     # Adding new element at the front
     # of the linked list
     llist.push(4)
-    print("Modified list...\n")
-    llist.print_linked_list()
 
     # Adding new element after an
     # existing node
     llist.insert_after_node(second, 7)
-    print("Node added in between the linked list...\n")
-    llist.print_linked_list()
 
     # Adding new node at the last of
     # linked list
     llist.append(10)
-    print("Node added at the end of linked list...\n")
+    print("Linked list elements...\n")
     llist.print_linked_list()
 
+    # Deleting the 4 from the linked list
+    llist.delete(10)
+    llist.delete(3)
+    llist.delete(1)
+    llist.delete(2)
+    llist.delete(7)
+    llist.delete(3)
+    llist.delete(0)
+    print("\nLinked list after deletion of element...\n")
+    llist.print_linked_list()
 
