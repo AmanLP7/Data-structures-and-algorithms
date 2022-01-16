@@ -90,16 +90,21 @@ class BreadthFirstSearch:
         for node in graph.keys():
             Q.put(node)
             marker[node] = True
+            print(f"Explored node: {node}")
             break
 
         # Run the while loop until Q
         # runs out of nodes
-        while Q.empty is False:
+        while Q.empty() is False:
             node = Q.get()
-            
-            
-        
+            for v in graph[node]:
+                if marker[v] is not True:
+                    marker[v] = True
+                    print(f"Explored node: {v}")
+                    Q.put(v)
 
+        return None
+            
 
 
 
@@ -124,4 +129,7 @@ if __name__ == "__main__":
     pretty_print = PrettyPrinter()
     pretty_print.pprint(g._graph)
 
-    BreadthFirstSearch().search(g._graph)
+    print("\nPerforming a breadth first search on the graph ...\n")
+
+    BFS = BreadthFirstSearch()
+    BFS.search(g._graph)
