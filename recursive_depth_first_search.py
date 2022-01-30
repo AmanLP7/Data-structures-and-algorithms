@@ -93,12 +93,12 @@ class DepthFirstSearch:
         '''
 
         self.marker[start_vertex] = True
-        print(f"Explored node: {start_vertex}")
-
+        
         for node in graph[start_vertex]:
             if self.marker[node] is not True:
                 self.search(graph, node)
         
+        print(f"Explored node: {start_vertex}")
 
 ########################################################################################################################
 
