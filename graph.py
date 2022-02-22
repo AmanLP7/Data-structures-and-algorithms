@@ -118,18 +118,15 @@ if __name__ == '__main__':
 
     # Reading the adjacency list
     connections = []
-    with open("D:/My github/Algorithms-divide-conquer/Assignment-4/kargerMinCut.txt", "r") as graph_data:
+    with open("test.txt", "r") as graph_data:
         for line in graph_data:
-            connection_list = line.strip().split("\t")
+            connection_list = line.strip().split(" ")
             node = int(connection_list[0])
             edges = list(map(int, connection_list[1:]))
+            print((node, edges))
             connections.append((node, edges))
 
     g = Graph(connections)
 
     pretty_print = PrettyPrinter()
-    pretty_print.pprint(g._graph[200]) 
-
-    g.remove(200)
-
-    pretty_print.pprint(g._graph[200])
+    pretty_print.pprint(g._graph) 

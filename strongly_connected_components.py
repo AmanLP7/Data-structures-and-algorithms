@@ -13,6 +13,7 @@ this operation is O(m+n) where m is the number of edges and n is the number of n
 from pprint import PrettyPrinter        # For printing graphs
 from queue import LifoQueue             # A LIFO queue
 from collections import defaultdict     # Create dictionary with default element
+from datetime import datetime           # Python datetime
 
 # User defined modules
 from graph import Graph             # Create a graph
@@ -65,7 +66,7 @@ class SCC:
         
         self.stack = LifoQueue()
         self.all_children_discovered = None
-        self.length_of_components = defaultdict(lambda: 1)
+        self.length_of_components = defaultdict(lambda: 0)
 
 
     def reverse(self) -> dict:
@@ -85,7 +86,7 @@ class SCC:
 
         for key, value in self.graph.items():
             for v in value:
-                connections.append((v, key))
+                connections.append((v, [key]))
 
         reverse_graph = Graph(connections, directed=True)
 
@@ -179,6 +180,7 @@ class SCC:
         node = leader_node
         self.stack.put(node)
         self.marker[node] = "black"
+        self.length_of_components[leader_node] += 1
 
         # Iterate while the stack is not empty
         while self.stack.empty() is not True:
@@ -202,13 +204,15 @@ class SCC:
 
 if __name__ == "__main__":
 
+    start = datetime.now()
+
     # Reading the adjacency list
     connections = []
-    with open("test.txt", "r") as data:
+    with open("SCC.txt", "r") as data:
         for line in data:
             connection_list = line.strip().split(" ")
-            node = connection_list[0]
-            edges = list(connection_list[1:])
+            node = int(connection_list[0])
+            edges = [int(x) for x in list(connection_list[1:])]
             connections.append((node, edges))
 
     # Creating a graph
@@ -216,16 +220,25 @@ if __name__ == "__main__":
 
     # Print the graph
     pretty_print = PrettyPrinter()
+    #print("Original graph:\n")
+    #pretty_print.pprint(g._graph)
 
     # Creating a class object
     scc = SCC(g._graph)
 
     # Reversing the graph
     reverse_graph = scc.reverse()
+    #print("Reverse graph:\n")
+    #pretty_print.pprint(reverse_graph)
 
+    # Nodes in the graph
+    nodes = [x for x in reverse_graph.keys()]
+    nodes.sort(reverse=True)
+
+    #print(f"List of nodes in descending order:{nodes}\n")
     # Calculating the finishng times
-    for node in range(len(reverse_graph.keys()), 0, -1):
-        scc.first_pass(reverse_graph, str(node))
+    for node in nodes:
+        scc.first_pass(reverse_graph, node)
 
     # Marking all the nodes as explored
     scc.marker = {x:"white" for x in scc.marker.keys()}
@@ -233,7 +246,13 @@ if __name__ == "__main__":
     # Performing second pass in the original graph
     while scc.finishing_time.empty() is not True:
         element = scc.finishing_time.get()
-        scc.second_pass(str(element))
+        if scc.marker[element] != "black":
+            scc.second_pass(element)
 
-    pretty_print.pprint(scc.length_of_components)
+    # Length of components
+    cycles = [x for x in scc.length_of_components.values()]
+    cycles.sort(reverse=True)
 
+    print(cycles[:5])
+
+    print(f"Total time taken: {datetime.now() - start}")
