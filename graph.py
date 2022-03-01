@@ -123,7 +123,6 @@ if __name__ == '__main__':
             connection_list = line.strip().split(" ")
             node = int(connection_list[0])
             edges = list(map(int, connection_list[1:]))
-            print((node, edges))
             connections.append((node, edges))
 
     g = Graph(connections)
