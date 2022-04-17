@@ -1,11 +1,20 @@
 ####################################### Python script to implement a minimum heap ######################################
 
 '''
-This script implements a minimu heap data structure that can be used as
-a priority queue for ascending order
+This script implements a minimum heap data structure that can be used as
+a priority queue to get the key with the lowest value.
 '''
 
 ########################################################################################################################
+
+### Importing required modules
+
+# 3rd party modules
+from typing import Union            # Type annotations
+
+
+########################################################################################################################
+
 
 class MinimumHeap:
     '''
@@ -42,7 +51,7 @@ class MinimumHeap:
         '''
 
         self.maxsize = maxsize
-        self.heap = [0]*(maxsize+1)
+        self.heap = ["NA"]*(maxsize+1)
         self.front = 1
         self.heap[0] = -float("inf")
         self.size = 0
@@ -155,4 +164,127 @@ class MinimumHeap:
         None
         '''
 
-        pass
+        # Check if the node is leaf node or 
+        # not, if it is a leaf node then do
+        # nothing as it serves as the base case.
+        if not self.is_leaf_node(position):
+
+            # Now check if any of the child element
+            # is smaller than the parent node
+            left_child, right_child = self.get_child(position)
+
+            if ((self.heap[left_child] < self.heap[position]) or 
+                (self.heap[right_child] < self.heap[position])):
+                
+                # If left child is smaller than the 
+                # right child then swap the left child 
+                # with the parent and recursively heapify
+                # the position of left child
+                if self.heap[left_child] < self.heap[right_child]:
+                    self.swap(position, left_child)
+                    self.heapify(left_child)
+
+                # Else perform the above steps
+                # for the right child.
+                else:
+                    self.swap(position, right_child)
+                    self.heapify(right_child)
+
+        return None
+
+
+    def insert_node(self, element: Union[int, tuple]) -> None:
+        '''
+        Function to insert node to a heap.
+        ...
+
+        Parameters
+        ----------
+        element (int or tuple):
+            element to be added to the tuple
+
+        Returns
+        -------
+        None
+        '''
+
+        if self.size >= self.maxsize:
+            return "No space!!!"
+
+        self.size += 1
+        self.heap[self.size] = element
+
+        current_position = self.size
+        while (self.heap[current_position] < self.heap[self.get_parent(current_position)]):
+            self.swap(current_position, self.get_parent(current_position))
+            current_position = self.get_parent(current_position)
+
+
+    def print_heap(self) -> None:
+        '''
+        Function to print the elements 
+        of the heap.
+        ...
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
+        '''
+
+        for i in range(1, (self.size//2) + 1):
+            parent = self.heap[i]
+            left_child = self.heap[2*i]
+            right_child = self.heap[2*i + 1]
+            print(f"PARENT: {parent}, LEFT CHILD: {left_child}, RIGHT CHILD: {right_child}")
+
+        return None
+
+
+    def remove_element(self):
+        '''
+        Function to remove the minium element
+        from the heap and return it.
+        ...
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        Minimum element from the heap
+        '''
+
+        min_element = self.heap[self.front]
+        self.heap[self.front] = self.heap[self.size]
+        self.size -= 1
+        self.heapify(self.front)
+
+
+########################################################################################################################
+
+
+if __name__ == "__main__":
+
+    H = MinimumHeap(15)
+    H.insert_node(5)
+    H.insert_node(3)
+    H.insert_node(17)
+    H.insert_node(10)
+    H.insert_node(84)
+    H.insert_node(19)
+    H.insert_node(6)
+    H.insert_node(22)
+    H.insert_node(9)
+    H.print_heap()
+
+    
+
+
+
+
+
